@@ -6,7 +6,7 @@
 
 > **This fork** builds *TotK Native (fork)* (`io.github.kurigohankamehameha.totk`), which installs beside or instead
 > of the official app and adds mods import, Lossless Scaling frame generation, the Eden Duo second screen and more.
-> Releases: [KuriGohan-Kamehameha/totk-android](https://github.com/KuriGohan-Kamehameha/totk-android/releases). Its code is on the [`common`](https://github.com/P1R4N351/totk-android/tree/common) branch,
+> Releases: [P1R4N351/totk-android](https://github.com/P1R4N351/totk-android/releases). Its code is on the [`common`](https://github.com/P1R4N351/totk-android/tree/common) branch,
 > shared with *BotW Native* ([P1R4N351/botw-android](https://github.com/P1R4N351/botw-android)); the guide for the
 > fork app is [docs/totk-native.md](https://github.com/P1R4N351/totk-android/blob/common/docs/totk-native.md). This page is the original app's README.
 
