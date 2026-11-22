@@ -44,9 +44,21 @@ final class SettingsStore {
         LocaleList list = LocaleList.getDefault();
         return list.isEmpty() ? null : list.get(0).toLanguageTag();
     }
+    /** AYN's Controller style (Settings.AYN_STYLE_PROPERTY), "" where it cannot be read. Read at every write, so a
+     * change of the style is picked up at the next game start. */
+    static String controllerStyle() {
+        try {
+            Object value = Class.forName("android.os.SystemProperties").getMethod("get", String.class, String.class)
+                    .invoke(null, Settings.AYN_STYLE_PROPERTY, "");
+            return value instanceof String ? (String) value : "";
+        } catch (ReflectiveOperationException | RuntimeException unreadable) {
+            return "";
+        }
+    }
     /** Rewrite settings.env (atomic, Settings.writeAtomic). Returns null on success, else why it failed. */
     static String writeEnv(Context context, Settings settings) {
         try {
+            settings.device(Build.MANUFACTURER, controllerStyle());   // an AYN handheld in its Xbox Controller style (Settings.faceButtons)
             Settings.writeAtomic(context.getFilesDir(), ENV, settings.env(locale(), StorageLocation.envValue(context)));
             return null;
         } catch (IOException | SecurityException failed) {

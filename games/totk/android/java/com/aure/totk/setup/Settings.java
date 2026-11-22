@@ -265,7 +265,7 @@ final class Settings {
         line(out, "TOTK_OVERLAY=" + get("overlay"));
         line(out, "TOTK_OVERLAY_POS=" + get("overlay_pos"));
         line(out, "TOTK_COMPANION=" + (get("second_screen").equals("on") ? "1" : "0"));
-        line(out, "TOTK_FACE_BUTTONS=" + (get("buttons").equals("xbox") ? "position" : "label"));
+        line(out, "TOTK_FACE_BUTTONS=" + faceButtons(get("buttons"), deviceMaker, controllerStyle));
         line(out, "TOTK_AUDIO_PREFILL_MS=" + (get("audio_latency").equals("low") ? "10" : get("audio_latency").equals("safe") ? "40" : "20"));
         // Rumble strength 0 gives the game no vibration devices; otherwise the game's rumble times the strength.
         int rumble = number("rumble");
@@ -278,6 +278,31 @@ final class Settings {
         return out.toString();
     }
     private static void line(StringBuilder out, String line) { out.append(line).append('\n'); }
+
+    /** AYN's handhelds (the Thor, the Odins) have a system Controller style, kept in this property. In the default
+     * style the built-in "Odin Controller" reports its face buttons by their printed, Nintendo, letters, which is the
+     * Nintendo layout here (seen on a Thor, 2026-11-20: the property read 0). In the Xbox style it is said to report
+     * them by position (AYN's own strings: "XBox Style", "Flipped Gamepad"); that the Xbox style is the value 1 is
+     * INFERRED, not seen on a device. On an AYN device in that style the buttons are mapped by position whatever
+     * the menu says, so each stays where the game's prompt shows it. */
+    static final String AYN = "AYN", AYN_STYLE_PROPERTY = "persist.sys.gamepad.type", AYN_STYLE_XBOX = "1";
+    private String deviceMaker = "", controllerStyle = "";
+
+    /** The device this settings.env is written on: Build.MANUFACTURER and the AYN_STYLE_PROPERTY value ("" or null
+     * when unknown, which leaves the menu's choice alone). */
+    Settings device(String maker, String style) {
+        deviceMaker = maker == null ? "" : maker;
+        controllerStyle = style == null ? "" : style;
+        return this;
+    }
+
+    /** TOTK_FACE_BUTTONS for the menu's Button layout on this device: "position" for Xbox, and on an AYN device whose
+     * Controller style is Xbox; otherwise "label". */
+    static String faceButtons(String buttons, String maker, String style) {
+        if ("xbox".equals(buttons)) return "position";
+        boolean aynXboxStyle = AYN.equals(maker == null ? "" : maker.trim()) && AYN_STYLE_XBOX.equals(style == null ? "" : style.trim());
+        return aynXboxStyle ? "position" : "label";
+    }
     /** value / 10^scale as a plain decimal with at least one fraction digit (20 -> 0.2, 200 -> 2.0). */
     private static String decimal(int value, int scale) {
         BigDecimal d = BigDecimal.valueOf(value).movePointLeft(scale).stripTrailingZeros();
