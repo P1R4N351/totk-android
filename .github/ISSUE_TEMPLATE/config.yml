@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: TotK Native README
+    url: https://github.com/AurelioB/totk-android#readme
+    about: Install, settings, known limitations and the FAQ.
+  - name: TotK Native releases
+    url: https://github.com/AurelioB/totk-android/releases
+    about: Official Android release builds.
+  - name: Shader list for the Mac/iOS apps (MacNativeGames)
+    url: https://github.com/ly05010419/MacNativeGames/blob/main/docs/shader-list.md
+    about: The Mac, iPhone and iPad apps' shared shader list. The Android app translates missing shaders on the device and does not write shader-list-contribution.txt.
